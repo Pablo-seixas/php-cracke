@@ -4,7 +4,12 @@ Sistema empresarial para gestão integrada de farmácia e atendimento clínico, 
 
 ## Estado do desenvolvimento
 
-Etapa 1 — ambiente e instalação concluída. O domínio, as migrations e os módulos funcionais serão implementados nas próximas etapas do projeto.
+Etapas concluídas:
+
+- Etapa 1 — ambiente, instalação e PostgreSQL.
+- Etapa 2 — schema, migrations, seed, fixtures e relacionamentos ORM.
+
+Autenticação e regras funcionais serão implementadas a partir da Etapa 3.
 
 ## Stack
 
@@ -39,6 +44,14 @@ CREATE DATABASE farmaclinic OWNER farmaclinic ENCODING 'UTF8';
 CREATE DATABASE farmaclinic_test OWNER farmaclinic ENCODING 'UTF8';
 ```
 
+Execute as migrations e os dados iniciais:
+
+```powershell
+php bin/cake.php migrations migrate
+php bin/cake.php migrations migrate --connection test
+php bin/cake.php seeds run InitialData
+```
+
 Valide a conexão e execute o servidor:
 
 ```powershell
@@ -54,7 +67,33 @@ A aplicação estará disponível em `http://localhost:8765`.
 php vendor/bin/phpunit
 ```
 
-Resultado da Etapa 1: 9 testes e 23 assertions aprovados.
+Resultado da Etapa 2: 12 testes e 71 assertions aprovados.
+
+## Dados de demonstração
+
+- Usuário: `admin@farmaclinic.local`
+- Senha: `Demo@12345`
+
+Esses dados são fictícios e destinados somente ao desenvolvimento. O login será habilitado na Etapa 3.
+
+## Banco de dados
+
+A migration inicial cria 41 tabelas de domínio. Os principais relacionamentos são:
+
+```text
+usuarios --< usuarios_perfis >-- perfis --< perfis_permissoes >-- permissoes
+categorias --< medicamentos >-- fabricantes
+medicamentos --< lotes --< movimentacoes_estoque
+fornecedores --< cotacoes --< cotacoes_itens
+solicitacoes_compras --< solicitacoes_compras_itens
+compras --< compras_itens
+clientes --< vendas --< vendas_itens
+pacientes --< consultas --< atendimentos
+pacientes -- prontuarios --< prontuarios_historicos
+vendas --< pagamentos >-- caixas --< movimentacoes_caixa
+```
+
+Valores monetários usam `NUMERIC`, validade usa `DATE`, eventos usam `TIMESTAMPTZ`, auditoria usa `JSONB` e endereços de rede usam `INET`.
 
 ## Configuração
 
@@ -67,8 +106,7 @@ O ambiente local usa locale `pt_BR`, fuso `America/Bahia` e UTF-8. Credenciais e
 
 ## Próximas etapas
 
-1. Migrations, seeds, fixtures e relacionamentos.
-2. Autenticação, autorização, perfis e permissões.
-3. Medicamentos, lotes e estoque.
-4. Compras, vendas, clínica, financeiro, dashboard e API REST.
-5. Auditoria, segurança e revisão LGPD.
+1. Autenticação, autorização, perfis e permissões.
+2. Medicamentos, lotes e estoque.
+3. Compras, vendas, clínica, financeiro, dashboard e API REST.
+4. Auditoria, segurança e revisão LGPD.
