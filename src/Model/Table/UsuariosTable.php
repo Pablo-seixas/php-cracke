@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use DateTimeImmutable;
 
 /**
  * Usuarios Model
@@ -114,6 +116,7 @@ class UsuariosTable extends Table
         $validator
             ->scalar('senha')
             ->maxLength('senha', 255)
+            ->minLength('senha', 12, 'A senha deve possuir ao menos 12 caracteres.')
             ->requirePresence('senha', 'create')
             ->notEmptyString('senha');
 
@@ -134,6 +137,27 @@ class UsuariosTable extends Table
             ->allowEmptyDateTime('deleted');
 
         return $validator;
+    }
+
+    /**
+     * Finder used by Authentication. Inactive, deleted and locked users are excluded.
+     *
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Usuario> $query Query instance.
+     * @param array<string, mixed> $options Finder options.
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Usuario>
+     */
+    public function findAutenticacao(SelectQuery $query, array $options): SelectQuery
+    {
+        return $query
+            ->contain(['Perfis.Permissoes'])
+            ->where([
+                'Usuarios.ativo' => true,
+                'Usuarios.deleted IS' => null,
+                'OR' => [
+                    'Usuarios.bloqueado_ate IS' => null,
+                    'Usuarios.bloqueado_ate <=' => new DateTimeImmutable(),
+                ],
+            ]);
     }
 
     /**

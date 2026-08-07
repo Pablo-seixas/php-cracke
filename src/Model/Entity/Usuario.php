@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 /**
@@ -64,4 +65,51 @@ class Usuario extends Entity
         'vendas' => true,
         'perfis' => true,
     ];
+
+    /**
+     * @var array<string>
+     */
+    protected array $_hidden = ['senha'];
+
+    /**
+     * Hash a newly assigned password.
+     */
+    protected function _setSenha(string $senha): string
+    {
+        if ($senha === '' || str_starts_with($senha, '$2y$')) {
+            return $senha;
+        }
+
+        return (new DefaultPasswordHasher())->hash($senha);
+    }
+
+    /**
+     * Check a permission loaded through Perfis.Permissoes.
+     */
+    public function possuiPermissao(string $codigo): bool
+    {
+        foreach ($this->perfis ?? [] as $perfil) {
+            foreach ($perfil->permissoes ?? [] as $permissao) {
+                if ($permissao->codigo === $codigo) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check whether the user belongs to the administrator profile.
+     */
+    public function isAdministrador(): bool
+    {
+        foreach ($this->perfis ?? [] as $perfil) {
+            if ($perfil->nome === 'Administrador') {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

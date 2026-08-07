@@ -409,6 +409,12 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
+        'ini' => [
+            'session.cookie_httponly' => '1',
+            'session.cookie_samesite' => 'Lax',
+            'session.cookie_secure' => env('SESSION_COOKIE_SECURE', false) ? '1' : '0',
+            'session.use_strict_mode' => '1',
+        ],
     ],
 
     /**

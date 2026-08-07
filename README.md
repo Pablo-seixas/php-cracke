@@ -8,8 +8,9 @@ Etapas concluídas:
 
 - Etapa 1 — ambiente, instalação e PostgreSQL.
 - Etapa 2 — schema, migrations, seed, fixtures e relacionamentos ORM.
+- Etapa 3 — autenticação, autorização, usuários, perfis, permissões e bloqueio de login.
 
-Autenticação e regras funcionais serão implementadas a partir da Etapa 3.
+Os módulos farmacêuticos e clínicos serão implementados a partir da Etapa 4.
 
 ## Stack
 
@@ -18,6 +19,9 @@ Autenticação e regras funcionais serão implementadas a partir da Etapa 3.
 - PostgreSQL 15.3
 - Composer 2.10.2
 - PHPUnit 11.5
+- CakePHP Authentication 3.3
+- CakePHP Authorization 3.5
+- Bootstrap 5.3
 
 ## Requisitos
 
@@ -67,14 +71,28 @@ A aplicação estará disponível em `http://localhost:8765`.
 php vendor/bin/phpunit
 ```
 
-Resultado da Etapa 2: 12 testes e 71 assertions aprovados.
+Resultado da Etapa 3: 17 testes e 89 assertions aprovados.
 
 ## Dados de demonstração
 
 - Usuário: `admin@farmaclinic.local`
 - Senha: `Demo@12345`
 
-Esses dados são fictícios e destinados somente ao desenvolvimento. O login será habilitado na Etapa 3.
+Esses dados são fictícios e destinados somente ao desenvolvimento.
+
+O login está disponível em `http://localhost:8765/login`.
+
+## Autenticação e autorização
+
+- Sessão e formulário processados pelo CakePHP Authentication.
+- Policies e resolução ORM fornecidas pelo CakePHP Authorization.
+- Senhas armazenadas exclusivamente com hash seguro.
+- Usuários inativos, excluídos ou temporariamente bloqueados não são autenticados.
+- Cinco falhas em quinze minutos bloqueiam a conta por trinta minutos.
+- Login, logout e mudanças de permissões são auditados.
+- Cookies usam `HttpOnly`, `SameSite=Lax` e modo estrito.
+- Defina `SESSION_COOKIE_SECURE=true` em produção HTTPS.
+- Logout aceita somente requisições POST protegidas por CSRF e FormProtection.
 
 ## Banco de dados
 
@@ -106,7 +124,7 @@ O ambiente local usa locale `pt_BR`, fuso `America/Bahia` e UTF-8. Credenciais e
 
 ## Próximas etapas
 
-1. Autenticação, autorização, perfis e permissões.
-2. Medicamentos, lotes e estoque.
+1. Medicamentos, produtos, categorias, fabricantes, lotes e validade.
+2. Estoque e alertas.
 3. Compras, vendas, clínica, financeiro, dashboard e API REST.
 4. Auditoria, segurança e revisão LGPD.
