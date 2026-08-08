@@ -54,7 +54,7 @@ class AtendimentosTable extends Table
             'foreignKey' => 'paciente_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Profissionals', [
+        $this->belongsTo('Profissionais', [
             'foreignKey' => 'profissional_id',
             'className' => 'Profissionais',
             'joinType' => 'INNER',
@@ -156,7 +156,7 @@ class AtendimentosTable extends Table
         $rules->add($rules->isUnique(['consulta_id'], ['allowMultipleNulls' => true]), ['errorField' => 'consulta_id']);
         $rules->add($rules->existsIn(['consulta_id'], 'Consultas'), ['errorField' => 'consulta_id']);
         $rules->add($rules->existsIn(['paciente_id'], 'Pacientes'), ['errorField' => 'paciente_id']);
-        $rules->add($rules->existsIn(['profissional_id'], 'Profissionals'), ['errorField' => 'profissional_id']);
+        $rules->add($rules->existsIn(['profissional_id'], 'Profissionais'), ['errorField' => 'profissional_id']);
 
         return $rules;
     }

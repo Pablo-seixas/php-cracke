@@ -49,7 +49,7 @@ class PrescricoesTable extends Table
             'foreignKey' => 'atendimento_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Profissionals', [
+        $this->belongsTo('Profissionais', [
             'foreignKey' => 'profissional_id',
             'className' => 'Profissionais',
             'joinType' => 'INNER',
@@ -92,7 +92,7 @@ class PrescricoesTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['atendimento_id'], 'Atendimentos'), ['errorField' => 'atendimento_id']);
-        $rules->add($rules->existsIn(['profissional_id'], 'Profissionals'), ['errorField' => 'profissional_id']);
+        $rules->add($rules->existsIn(['profissional_id'], 'Profissionais'), ['errorField' => 'profissional_id']);
 
         return $rules;
     }
