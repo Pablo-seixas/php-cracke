@@ -52,7 +52,7 @@ class ComprasTable extends Table
             'foreignKey' => 'solicitacao_compra_id',
             'className' => 'SolicitacoesCompras',
         ]);
-        $this->belongsTo('Fornecedors', [
+        $this->belongsTo('Fornecedores', [
             'foreignKey' => 'fornecedor_id',
             'className' => 'Fornecedores',
             'joinType' => 'INNER',
@@ -129,7 +129,7 @@ class ComprasTable extends Table
     {
         $rules->add($rules->isUnique(['numero']), ['errorField' => 'numero']);
         $rules->add($rules->existsIn(['solicitacao_compra_id'], 'SolicitacaoCompras'), ['errorField' => 'solicitacao_compra_id']);
-        $rules->add($rules->existsIn(['fornecedor_id'], 'Fornecedors'), ['errorField' => 'fornecedor_id']);
+        $rules->add($rules->existsIn(['fornecedor_id'], 'Fornecedores'), ['errorField' => 'fornecedor_id']);
         $rules->add($rules->existsIn(['usuario_id'], 'Usuarios'), ['errorField' => 'usuario_id']);
 
         return $rules;

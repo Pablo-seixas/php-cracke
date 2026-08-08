@@ -51,13 +51,19 @@ class SolicitacoesComprasTable extends Table
             'className' => 'Usuarios',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Aprovadors', [
+        $this->belongsTo('Aprovadores', [
             'foreignKey' => 'aprovador_id',
             'className' => 'Usuarios',
         ]);
-        $this->belongsTo('FornecedorEscolhidos', [
+        $this->belongsTo('FornecedoresEscolhidos', [
             'foreignKey' => 'fornecedor_escolhido_id',
             'className' => 'Fornecedores',
+        ]);
+        $this->hasMany('SolicitacoesComprasItens', [
+            'foreignKey' => 'solicitacao_compra_id',
+        ]);
+        $this->hasMany('Cotacoes', [
+            'foreignKey' => 'solicitacao_compra_id',
         ]);
     }
 
@@ -125,8 +131,8 @@ class SolicitacoesComprasTable extends Table
     {
         $rules->add($rules->isUnique(['numero']), ['errorField' => 'numero']);
         $rules->add($rules->existsIn(['solicitante_id'], 'Solicitantes'), ['errorField' => 'solicitante_id']);
-        $rules->add($rules->existsIn(['aprovador_id'], 'Aprovadors'), ['errorField' => 'aprovador_id']);
-        $rules->add($rules->existsIn(['fornecedor_escolhido_id'], 'FornecedorEscolhidos'), ['errorField' => 'fornecedor_escolhido_id']);
+        $rules->add($rules->existsIn(['aprovador_id'], 'Aprovadores'), ['errorField' => 'aprovador_id']);
+        $rules->add($rules->existsIn(['fornecedor_escolhido_id'], 'FornecedoresEscolhidos'), ['errorField' => 'fornecedor_escolhido_id']);
 
         return $rules;
     }

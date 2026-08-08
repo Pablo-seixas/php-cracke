@@ -34,6 +34,7 @@ $usuarioAtual = $identityData instanceof Usuario ? $identityData->nome : null;
                     <?= $this->Html->link('Fabricantes', '/fabricantes', ['class' => 'text-white text-decoration-none']) ?>
                     <?= $this->Html->link('Lotes', '/lotes', ['class' => 'text-white text-decoration-none']) ?>
                     <?= $this->Html->link('Estoque', '/estoque', ['class' => 'text-white text-decoration-none']) ?>
+                    <?= $this->Html->link('Fornecedores', '/fornecedores', ['class' => 'text-white text-decoration-none']) ?>
                     <?= $this->Html->link('Usuários', '/usuarios', ['class' => 'text-white text-decoration-none']) ?>
                     <span><?= h($usuarioAtual) ?></span>
                     <?= $this->Form->postLink('Sair', '/logout', ['class' => 'btn btn-sm btn-outline-light']) ?>

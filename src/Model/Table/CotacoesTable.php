@@ -50,10 +50,13 @@ class CotacoesTable extends Table
             'className' => 'SolicitacoesCompras',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Fornecedors', [
+        $this->belongsTo('Fornecedores', [
             'foreignKey' => 'fornecedor_id',
             'className' => 'Fornecedores',
             'joinType' => 'INNER',
+        ]);
+        $this->hasMany('CotacoesItens', [
+            'foreignKey' => 'cotacao_id',
         ]);
     }
 
@@ -106,7 +109,7 @@ class CotacoesTable extends Table
     {
         $rules->add($rules->isUnique(['solicitacao_compra_id', 'fornecedor_id']), ['errorField' => 'solicitacao_compra_id', 'message' => __('This combination of solicitacao_compra_id and fornecedor_id already exists')]);
         $rules->add($rules->existsIn(['solicitacao_compra_id'], 'SolicitacaoCompras'), ['errorField' => 'solicitacao_compra_id']);
-        $rules->add($rules->existsIn(['fornecedor_id'], 'Fornecedors'), ['errorField' => 'fornecedor_id']);
+        $rules->add($rules->existsIn(['fornecedor_id'], 'Fornecedores'), ['errorField' => 'fornecedor_id']);
 
         return $rules;
     }

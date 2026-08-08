@@ -45,12 +45,12 @@ class CotacoesItensTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Cotacaos', [
+        $this->belongsTo('Cotacoes', [
             'foreignKey' => 'cotacao_id',
             'className' => 'Cotacoes',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('SolicitacaoCompraItems', [
+        $this->belongsTo('SolicitacoesComprasItens', [
             'foreignKey' => 'solicitacao_compra_item_id',
             'className' => 'SolicitacoesComprasItens',
             'joinType' => 'INNER',
@@ -94,8 +94,8 @@ class CotacoesItensTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['cotacao_id', 'solicitacao_compra_item_id']), ['errorField' => 'cotacao_id', 'message' => __('This combination of cotacao_id and solicitacao_compra_item_id already exists')]);
-        $rules->add($rules->existsIn(['cotacao_id'], 'Cotacaos'), ['errorField' => 'cotacao_id']);
-        $rules->add($rules->existsIn(['solicitacao_compra_item_id'], 'SolicitacaoCompraItems'), ['errorField' => 'solicitacao_compra_item_id']);
+        $rules->add($rules->existsIn(['cotacao_id'], 'Cotacoes'), ['errorField' => 'cotacao_id']);
+        $rules->add($rules->existsIn(['solicitacao_compra_item_id'], 'SolicitacoesComprasItens'), ['errorField' => 'solicitacao_compra_item_id']);
 
         return $rules;
     }

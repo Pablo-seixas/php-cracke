@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Validation\DocumentoValidator;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -75,6 +76,10 @@ class FornecedoresTable extends Table
             ->maxLength('cnpj', 14)
             ->requirePresence('cnpj', 'create')
             ->notEmptyString('cnpj')
+            ->add('cnpj', 'validCnpj', [
+                'rule' => [DocumentoValidator::class, 'cnpj'],
+                'message' => 'Informe um CNPJ válido.',
+            ])
             ->add('cnpj', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator

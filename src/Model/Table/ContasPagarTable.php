@@ -48,7 +48,7 @@ class ContasPagarTable extends Table
         $this->belongsTo('Compras', [
             'foreignKey' => 'compra_id',
         ]);
-        $this->belongsTo('Fornecedors', [
+        $this->belongsTo('Fornecedores', [
             'foreignKey' => 'fornecedor_id',
             'className' => 'Fornecedores',
         ]);
@@ -126,7 +126,7 @@ class ContasPagarTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['compra_id'], 'Compras'), ['errorField' => 'compra_id']);
-        $rules->add($rules->existsIn(['fornecedor_id'], 'Fornecedors'), ['errorField' => 'fornecedor_id']);
+        $rules->add($rules->existsIn(['fornecedor_id'], 'Fornecedores'), ['errorField' => 'fornecedor_id']);
 
         return $rules;
     }
