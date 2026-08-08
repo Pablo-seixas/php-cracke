@@ -29,6 +29,9 @@ $usuarioAtual = $identityData instanceof Usuario ? $identityData->nome : null;
             <?php if ($usuarioAtual !== null): ?>
                 <div class="d-flex align-items-center gap-3 text-white">
                     <?= $this->Html->link('Medicamentos', '/medicamentos', ['class' => 'text-white text-decoration-none']) ?>
+                    <?= $this->Html->link('Produtos', '/produtos', ['class' => 'text-white text-decoration-none']) ?>
+                    <?= $this->Html->link('Categorias', '/categorias', ['class' => 'text-white text-decoration-none']) ?>
+                    <?= $this->Html->link('Fabricantes', '/fabricantes', ['class' => 'text-white text-decoration-none']) ?>
                     <?= $this->Html->link('Lotes', '/lotes', ['class' => 'text-white text-decoration-none']) ?>
                     <?= $this->Html->link('Usuários', '/usuarios', ['class' => 'text-white text-decoration-none']) ?>
                     <span><?= h($usuarioAtual) ?></span>
