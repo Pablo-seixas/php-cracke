@@ -112,7 +112,7 @@ class Application extends BaseApplication implements
             // https://book.cakephp.org/5/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
-                'secure' => !Configure::read('debug'),
+                'secure' => str_starts_with((string)Configure::read('App.fullBaseUrl'), 'https://'),
                 'samesite' => 'Lax',
             ]));
 

@@ -52,7 +52,7 @@ final class UsuariosController extends AppController
             $service->registrarFalha((string)$this->request->getData('email'), $ip, $userAgent);
             $this->Flash->error('E-mail ou senha inválidos, ou usuário temporariamente bloqueado.');
 
-            return null;
+            return $this->redirect('/login');
         }
 
         $identity = $this->Authentication->getIdentity();

@@ -54,8 +54,7 @@ final class UsuariosControllerTest extends TestCase
         $this->enableCsrfToken();
         $this->enableSecurityToken();
         $this->post('/login', ['email' => $usuario->email, 'senha' => 'senha-incorreta']);
-        $this->assertResponseOk();
-        $this->assertResponseContains('E-mail ou senha inválidos');
+        $this->assertRedirect('/login');
 
         $tentativas = TableRegistry::getTableLocator()->get('TentativasLogin');
         $this->assertSame(1, $tentativas->find()->where(['sucesso' => false])->count());
