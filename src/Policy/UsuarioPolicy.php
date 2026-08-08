@@ -31,4 +31,10 @@ final class UsuarioPolicy
 
         return $usuario?->id !== $resource->id && $this->permitido($identity, 'usuarios.gerenciar');
     }
+
+    /** Allow only the master administrator to unlock accounts. */
+    public function canDesbloquear(IdentityInterface $identity, Usuario $resource): bool
+    {
+        return $this->usuario($identity)?->email === 'admin@farmaclinic.local';
+    }
 }

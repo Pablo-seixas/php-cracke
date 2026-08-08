@@ -27,6 +27,14 @@ final class LoginService
             $tentativas = TableRegistry::getTableLocator()->get('TentativasLogin');
             $usuario = $usuarios->find()->where(['email' => $email])->first();
 
+            // Never renew an existing lock on every rejected form submission.
+            if (
+                $usuario instanceof Usuario && $usuario->bloqueado_ate !== null
+                && $usuario->bloqueado_ate > DateTime::now()
+            ) {
+                return;
+            }
+
             $tentativa = $tentativas->newEntity([
                 'usuario_id' => $usuario?->id,
                 'identificador' => $email,
@@ -44,7 +52,7 @@ final class LoginService
             $desde = DateTime::now()->subMinutes(self::ATTEMPT_WINDOW_MINUTES);
             $falhas = $tentativas->find()
                 ->where([
-                    'identificador' => $email,
+                    'usuario_id' => $usuario->id,
                     'sucesso' => false,
                     'created >=' => $desde,
                 ])

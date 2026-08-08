@@ -1,6 +1,8 @@
 <?php
 /** @var \App\View\AppView $this */
 /** @var iterable<\App\Model\Entity\Usuario> $usuarios */
+/** @var \App\Model\Entity\Usuario|null $usuarioAtual */
+/** @var iterable<\Cake\Datasource\EntityInterface> $recuperacoes */
 $this->assign('title', 'Usuários');
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -8,8 +10,21 @@ $this->assign('title', 'Usuários');
         <h1 class="h3 mb-1">Usuários</h1>
         <p class="text-body-secondary mb-0">Gerencie acessos, perfis e bloqueios.</p>
     </div>
-    <?= $this->Html->link('Novo usuário', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
+    <?php if ($usuarioAtual?->email === 'admin@farmaclinic.local'): ?>
+        <?= $this->Html->link('Novo usuário', ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
+    <?php endif; ?>
 </div>
+<?php foreach ($recuperacoes as $recuperacao): ?>
+    <div class="alert alert-warning d-flex justify-content-between align-items-center">
+        <span><?= h($recuperacao->mensagem) ?></span>
+        <?php if (!empty($recuperacao->dados['usuario_id'])): ?>
+            <?= $this->Html->link('Redefinir senha', [
+                'action' => 'edit',
+                $recuperacao->dados['usuario_id'],
+            ], ['class' => 'btn btn-sm btn-warning']) ?>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
 <div class="card border-0 shadow-sm">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -23,6 +38,12 @@ $this->assign('title', 'Usuários');
                     <td><span class="badge text-bg-<?= $usuario->ativo ? 'success' : 'secondary' ?>"><?= $usuario->ativo ? 'Ativo' : 'Inativo' ?></span></td>
                     <td class="text-end">
                         <?= $this->Html->link('Editar', ['action' => 'edit', $usuario->id], ['class' => 'btn btn-sm btn-outline-primary']) ?>
+                        <?php if ($usuario->bloqueado_ate !== null): ?>
+                            <?= $this->Form->postLink('Desbloquear', ['action' => 'desbloquear', $usuario->id], [
+                                'class' => 'btn btn-sm btn-outline-success',
+                                'confirm' => 'Desbloquear este usuário?',
+                            ]) ?>
+                        <?php endif; ?>
                         <?php if ($usuario->ativo): ?>
                             <?= $this->Form->postLink('Inativar', ['action' => 'inativar', $usuario->id], [
                                 'class' => 'btn btn-sm btn-outline-danger',

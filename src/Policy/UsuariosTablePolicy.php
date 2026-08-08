@@ -19,6 +19,6 @@ final class UsuariosTablePolicy
     /** Check permission to create users. */
     public function canAdd(IdentityInterface $identity, UsuariosTable $resource): bool
     {
-        return $this->permitido($identity, 'usuarios.gerenciar');
+        return $this->usuario($identity)?->email === 'admin@farmaclinic.local';
     }
 }

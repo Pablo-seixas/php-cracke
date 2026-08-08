@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Model\Entity\Usuario;
 use App\Model\Table\UsuariosTable;
 use App\Service\LoginService;
+use App\Service\RecuperacaoSenhaService;
 use Authentication\IdentityInterface as AuthenticationIdentity;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
@@ -30,7 +31,7 @@ final class UsuariosController extends AppController
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
-        $this->Authentication->allowUnauthenticated(['login']);
+        $this->Authentication->allowUnauthenticated(['login', 'esqueciSenha']);
     }
 
     /**
@@ -85,6 +86,22 @@ final class UsuariosController extends AppController
         return $this->redirect('/login');
     }
 
+    /** Register a password recovery request without revealing account existence. */
+    public function esqueciSenha(): ?Response
+    {
+        $this->Authorization->skipAuthorization();
+        if ($this->request->is('post')) {
+            (new RecuperacaoSenhaService())->solicitar((string)$this->request->getData('email'));
+            $this->Flash->success(
+                'Se o e-mail estiver cadastrado, o administrador master receberá a solicitação.',
+            );
+
+            return $this->redirect('/login');
+        }
+
+        return null;
+    }
+
     /**
      * List users when the current identity has management permission.
      */
@@ -92,7 +109,16 @@ final class UsuariosController extends AppController
     {
         $this->Authorization->authorize($this->Usuarios, 'index');
         $query = $this->Usuarios->find()->contain(['Perfis'])->orderBy(['Usuarios.nome' => 'ASC']);
+        $usuarioAtual = $this->extrairUsuario($this->Authentication->getIdentity());
+        $recuperacoes = [];
+        if ($usuarioAtual?->email === 'admin@farmaclinic.local') {
+            $recuperacoes = $this->fetchTable('Notificacoes')->find()
+                ->where(['usuario_id' => $usuarioAtual->id, 'tipo' => 'recuperacao_senha', 'lida_em IS' => null])
+                ->orderByDesc('created')
+                ->all();
+        }
         $this->set('usuarios', $this->paginate($query));
+        $this->set(compact('recuperacoes', 'usuarioAtual'));
     }
 
     /**
@@ -157,6 +183,23 @@ final class UsuariosController extends AppController
         $usuario->deleted = new DateTimeImmutable();
         $this->Usuarios->saveOrFail($usuario);
         $this->Flash->success('Usuário inativado com sucesso.');
+
+        return $this->redirect(['action' => 'index']);
+    }
+
+    /** Unlock an account and discard its recent failed attempts. */
+    public function desbloquear(int $id): Response
+    {
+        $this->request->allowMethod(['post']);
+        $usuario = $this->Usuarios->get($id);
+        $this->Authorization->authorize($usuario, 'desbloquear');
+        $usuario->bloqueado_ate = null;
+        $this->Usuarios->saveOrFail($usuario, ['checkRules' => false]);
+        $this->Usuarios->TentativasLogin->deleteAll([
+            'OR' => ['usuario_id' => $usuario->id, 'identificador' => $usuario->email],
+            'sucesso' => false,
+        ]);
+        $this->Flash->success('Usuário desbloqueado com sucesso.');
 
         return $this->redirect(['action' => 'index']);
     }

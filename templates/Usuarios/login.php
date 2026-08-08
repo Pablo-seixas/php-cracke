@@ -25,6 +25,11 @@ $this->assign('title', 'Entrar');
                 ]) ?>
                 <?= $this->Form->button('Entrar', ['class' => 'btn btn-primary w-100 mt-3']) ?>
                 <?= $this->Form->end() ?>
+                <div class="text-center mt-3">
+                    <?= $this->Html->link('Esqueci a senha', '/esqueci-senha', [
+                        'class' => 'link-secondary small',
+                    ]) ?>
+                </div>
             </div>
         </div>
     </div>

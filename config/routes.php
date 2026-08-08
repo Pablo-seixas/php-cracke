@@ -57,6 +57,7 @@ return function (RouteBuilder $routes): void {
          */
         $builder->connect('/', ['controller' => 'Usuarios', 'action' => 'login']);
         $builder->connect('/login', ['controller' => 'Usuarios', 'action' => 'login']);
+        $builder->connect('/esqueci-senha', ['controller' => 'Usuarios', 'action' => 'esqueciSenha']);
         $builder->connect('/logout', ['controller' => 'Usuarios', 'action' => 'logout']);
 
         /*
