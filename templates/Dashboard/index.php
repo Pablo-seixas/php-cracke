@@ -1,0 +1,13 @@
+<?php $this->assign('title', 'Dashboard'); ?>
+<div class="d-flex justify-content-between align-items-center mb-4"><h1 class="h3 mb-0">Dashboard gerencial</h1>
+<?= $this->Html->link('Exportar vendas CSV', ['controller' => 'Relatorios', 'action' => 'vendas'], ['class' => 'btn btn-outline-primary']) ?></div>
+<?= $this->Form->create(null, ['type' => 'get', 'class' => 'row g-2 mb-4']) ?>
+<div class="col-auto"><?= $this->Form->control('inicio', ['type' => 'date', 'value' => $indicadores['inicio'], 'label' => false]) ?></div>
+<div class="col-auto"><?= $this->Form->control('fim', ['type' => 'date', 'value' => $indicadores['fim'], 'label' => false]) ?></div>
+<div class="col-auto"><?= $this->Form->button('Filtrar', ['class' => 'btn btn-primary']) ?></div><?= $this->Form->end() ?>
+<div class="row g-3">
+<?php foreach (['medicamentos' => 'Medicamentos', 'produtos' => 'Produtos', 'sem_estoque' => 'Sem estoque', 'estoque_critico' => 'Estoque crítico', 'proximos_vencimento' => 'Próximos do vencimento', 'vencidos' => 'Vencidos', 'pacientes' => 'Pacientes', 'consultas_agendadas' => 'Consultas agendadas', 'consultas_realizadas' => 'Consultas realizadas'] as $chave => $rotulo): ?>
+<div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body"><div class="text-body-secondary small"><?= h($rotulo) ?></div><div class="display-6"><?= h($indicadores[$chave]) ?></div></div></div></div><?php endforeach; ?>
+</div><div class="row g-3 mt-1"><div class="col-md-4"><div class="card border-0 shadow-sm"><div class="card-body"><small>Valor do estoque</small><div class="h3">R$ <?= number_format((float)$indicadores['valor_estoque'], 2, ',', '.') ?></div></div></div></div><div class="col-md-4"><div class="card border-0 shadow-sm"><div class="card-body"><small>Vendas no período</small><div class="h3">R$ <?= number_format((float)$indicadores['vendas_periodo'], 2, ',', '.') ?></div></div></div></div><div class="col-md-4"><div class="card border-0 shadow-sm"><div class="card-body"><small>Compras no período</small><div class="h3">R$ <?= number_format((float)$indicadores['compras_periodo'], 2, ',', '.') ?></div></div></div></div></div>
+<div class="card border-0 shadow-sm mt-4"><div class="card-body"><h2 class="h5">Vendas por dia</h2><canvas id="grafico-vendas" height="90"></canvas></div></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script><script>new Chart(document.getElementById('grafico-vendas'),{type:'line',data:{labels:<?= json_encode(array_column($vendasPorDia, 'dia')) ?>,datasets:[{label:'Vendas',data:<?= json_encode(array_column($vendasPorDia, 'total')) ?>,borderColor:'#0d6efd',tension:.25}]},options:{responsive:true}});</script>
