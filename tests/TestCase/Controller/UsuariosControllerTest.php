@@ -47,6 +47,16 @@ final class UsuariosControllerTest extends TestCase
         $this->assertSame(1, $auditorias->find()->where(['acao' => 'logout'])->count());
     }
 
+    public function testLoginAceitaNovaSessaoSemTokenDeProtecaoDeFormulario(): void
+    {
+        $usuario = $this->criarUsuario('Administrador');
+
+        $this->enableCsrfToken();
+        $this->post('/login', ['email' => $usuario->email, 'senha' => 'ValidPassword!123']);
+
+        $this->assertRedirect('/usuarios');
+    }
+
     public function testLoginInvalidoRegistraTentativa(): void
     {
         $usuario = $this->criarUsuario('Administrador');

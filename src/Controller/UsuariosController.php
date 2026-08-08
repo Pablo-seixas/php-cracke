@@ -23,6 +23,9 @@ final class UsuariosController extends AppController
     {
         parent::initialize();
         $this->Usuarios = $this->fetchTable('Usuarios');
+        // Login and recovery remain protected by CSRF middleware. Excluding them
+        // from session-bound form tokens prevents cached login tabs from failing.
+        $this->FormProtection->unlockActions(['login', 'esqueciSenha']);
     }
 
     /**
