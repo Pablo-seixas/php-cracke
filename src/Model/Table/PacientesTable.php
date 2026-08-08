@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Validation\DocumentoValidator;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -96,6 +97,10 @@ class PacientesTable extends Table
             ->scalar('cpf')
             ->maxLength('cpf', 11)
             ->allowEmptyString('cpf')
+            ->add('cpf', 'validCpf', [
+                'rule' => fn($value): bool => $value === null || $value === '' || DocumentoValidator::cpf($value),
+                'message' => 'Informe um CPF válido.',
+            ])
             ->add('cpf', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator

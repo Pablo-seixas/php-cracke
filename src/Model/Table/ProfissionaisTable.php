@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Validation\DocumentoValidator;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -79,6 +80,10 @@ class ProfissionaisTable extends Table
             ->maxLength('cpf', 11)
             ->requirePresence('cpf', 'create')
             ->notEmptyString('cpf')
+            ->add('cpf', 'validCpf', [
+                'rule' => [DocumentoValidator::class, 'cpf'],
+                'message' => 'Informe um CPF válido.',
+            ])
             ->add('cpf', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator

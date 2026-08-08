@@ -5,6 +5,28 @@ namespace App\Validation;
 
 final class DocumentoValidator
 {
+    /** Validate a Brazilian CPF, including both check digits. */
+    public static function cpf(mixed $value): bool
+    {
+        $cpf = preg_replace('/\D/', '', (string)$value) ?? '';
+        if (strlen($cpf) !== 11 || preg_match('/^(\d)\1{10}$/', $cpf)) {
+            return false;
+        }
+        for ($digito = 9; $digito < 11; $digito++) {
+            $soma = 0;
+            for ($indice = 0; $indice < $digito; $indice++) {
+                $soma += (int)$cpf[$indice] * ($digito + 1 - $indice);
+            }
+            $verificador = (10 * $soma) % 11;
+            $verificador = $verificador === 10 ? 0 : $verificador;
+            if ((int)$cpf[$digito] !== $verificador) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /** Validate a Brazilian CNPJ, including both check digits. */
     public static function cnpj(mixed $value): bool
     {

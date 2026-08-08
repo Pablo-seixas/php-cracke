@@ -45,7 +45,7 @@ class AgendasTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Profissionals', [
+        $this->belongsTo('Profissionais', [
             'foreignKey' => 'profissional_id',
             'className' => 'Profissionais',
             'joinType' => 'INNER',
@@ -98,7 +98,7 @@ class AgendasTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['profissional_id', 'inicio']), ['errorField' => 'profissional_id', 'message' => __('This combination of profissional_id and inicio already exists')]);
-        $rules->add($rules->existsIn(['profissional_id'], 'Profissionals'), ['errorField' => 'profissional_id']);
+        $rules->add($rules->existsIn(['profissional_id'], 'Profissionais'), ['errorField' => 'profissional_id']);
 
         return $rules;
     }

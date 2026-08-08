@@ -52,7 +52,7 @@ class ConsultasTable extends Table
             'foreignKey' => 'paciente_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Profissionals', [
+        $this->belongsTo('Profissionais', [
             'foreignKey' => 'profissional_id',
             'className' => 'Profissionais',
             'joinType' => 'INNER',
@@ -130,7 +130,7 @@ class ConsultasTable extends Table
     {
         $rules->add($rules->isUnique(['profissional_id', 'inicio']), ['errorField' => 'profissional_id', 'message' => __('This combination of profissional_id and inicio already exists')]);
         $rules->add($rules->existsIn(['paciente_id'], 'Pacientes'), ['errorField' => 'paciente_id']);
-        $rules->add($rules->existsIn(['profissional_id'], 'Profissionals'), ['errorField' => 'profissional_id']);
+        $rules->add($rules->existsIn(['profissional_id'], 'Profissionais'), ['errorField' => 'profissional_id']);
         $rules->add($rules->existsIn(['agenda_id'], 'Agendas'), ['errorField' => 'agenda_id']);
 
         return $rules;

@@ -75,7 +75,7 @@ A aplicação estará disponível em `http://localhost:8765`.
 php vendor/bin/phpunit
 ```
 
-Resultado atual: 38 testes e 135 assertions aprovados.
+Resultado atual: 41 testes e 140 assertions aprovados.
 
 ## Dados de demonstração
 
@@ -128,6 +128,6 @@ O ambiente local usa locale `pt_BR`, fuso `America/Bahia` e UTF-8. Credenciais e
 
 ## Próximas etapas
 
-1. Pacientes, profissionais, especialidades, agenda e consultas.
-2. Atendimentos, prontuários, dashboard, relatórios e API REST.
+1. Atendimentos, prontuários e prescrições.
+2. Dashboard, relatórios e API REST.
 3. Auditoria, segurança e revisão LGPD.
