@@ -71,7 +71,7 @@ class ProdutosTable extends Table
         ]);
         $this->belongsToMany('Fornecedores', [
             'foreignKey' => 'produto_id',
-            'targetForeignKey' => 'fornecedore_id',
+            'targetForeignKey' => 'fornecedor_id',
             'joinTable' => 'fornecedores_produtos',
         ]);
     }

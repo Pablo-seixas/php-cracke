@@ -52,7 +52,7 @@ class LotesTable extends Table
             'foreignKey' => 'medicamento_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Fornecedors', [
+        $this->belongsTo('Fornecedores', [
             'foreignKey' => 'fornecedor_id',
             'className' => 'Fornecedores',
         ]);
@@ -151,7 +151,7 @@ class LotesTable extends Table
     {
         $rules->add($rules->isUnique(['medicamento_id', 'numero_lote']), ['errorField' => 'medicamento_id', 'message' => __('This combination of medicamento_id and numero_lote already exists')]);
         $rules->add($rules->existsIn(['medicamento_id'], 'Medicamentos'), ['errorField' => 'medicamento_id']);
-        $rules->add($rules->existsIn(['fornecedor_id'], 'Fornecedors'), ['errorField' => 'fornecedor_id']);
+        $rules->add($rules->existsIn(['fornecedor_id'], 'Fornecedores'), ['errorField' => 'fornecedor_id']);
         $rules->add($rules->existsIn(['usuario_id'], 'Usuarios'), ['errorField' => 'usuario_id']);
 
         return $rules;

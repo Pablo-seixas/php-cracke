@@ -1,0 +1,1 @@
+<?php $this->assign('title', 'Novo medicamento'); ?><h1 class="h3 mb-4">Novo medicamento</h1><div class="card border-0 shadow-sm"><div class="card-body p-4"><?= $this->element('Medicamentos/form') ?></div></div>

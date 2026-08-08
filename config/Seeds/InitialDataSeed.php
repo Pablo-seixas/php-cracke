@@ -61,5 +61,52 @@ SQL);
         foreach ($catalogStatements as $statement) {
             $this->execute($statement);
         }
+
+        $this->execute(<<<'SQL'
+INSERT INTO medicamentos (
+    categoria_id, fabricante_id, codigo_interno, codigo_barras, nome_comercial, principio_ativo,
+    forma_farmaceutica, concentracao, apresentacao, unidade_medida, preco_custo, preco_venda,
+    estoque_minimo, estoque_maximo, necessita_receita, controlado, refrigerado
+)
+SELECT c.id, f.id, 'MED-DEMO-001', '7890000000001', 'Analgésico Demo', 'Substância fictícia A',
+       'Comprimido', '500 mg', 'Caixa com 20', 'CX', 8.50, 14.90, 10, 100, FALSE, FALSE, FALSE
+FROM categorias c CROSS JOIN fabricantes f
+WHERE c.nome = 'Medicamentos' AND f.nome = 'Laboratório Exemplo'
+ON CONFLICT (codigo_interno) DO NOTHING
+SQL);
+        $this->execute(<<<'SQL'
+INSERT INTO medicamentos (
+    categoria_id, fabricante_id, codigo_interno, codigo_barras, nome_comercial, principio_ativo,
+    forma_farmaceutica, concentracao, apresentacao, unidade_medida, preco_custo, preco_venda,
+    estoque_minimo, estoque_maximo, necessita_receita, tipo_receita, controlado, refrigerado
+)
+SELECT c.id, f.id, 'MED-DEMO-002', '7890000000002', 'Controlado Demo', 'Substância fictícia B',
+       'Cápsula', '10 mg', 'Caixa com 30', 'CX', 22.00, 39.90, 8, 50, TRUE, 'Branca', TRUE, FALSE
+FROM categorias c CROSS JOIN fabricantes f
+WHERE c.nome = 'Medicamentos' AND f.nome = 'Laboratório Exemplo'
+ON CONFLICT (codigo_interno) DO NOTHING
+SQL);
+        $this->execute(<<<'SQL'
+INSERT INTO lotes (
+    medicamento_id, numero_lote, data_fabricacao, data_validade, quantidade_recebida,
+    quantidade_disponivel, preco_custo, data_recebimento, usuario_id
+)
+SELECT m.id, 'DEMO-FEFO-01', CURRENT_DATE - 30, CURRENT_DATE + 45, 25, 7, m.preco_custo,
+       CURRENT_TIMESTAMP, u.id
+FROM medicamentos m CROSS JOIN usuarios u
+WHERE m.codigo_interno = 'MED-DEMO-001' AND u.email = 'admin@farmaclinic.local'
+ON CONFLICT (medicamento_id, numero_lote) DO NOTHING
+SQL);
+        $this->execute(<<<'SQL'
+INSERT INTO lotes (
+    medicamento_id, numero_lote, data_fabricacao, data_validade, quantidade_recebida,
+    quantidade_disponivel, preco_custo, data_recebimento, usuario_id
+)
+SELECT m.id, 'DEMO-FEFO-02', CURRENT_DATE - 15, CURRENT_DATE + 180, 40, 40, m.preco_custo,
+       CURRENT_TIMESTAMP, u.id
+FROM medicamentos m CROSS JOIN usuarios u
+WHERE m.codigo_interno = 'MED-DEMO-002' AND u.email = 'admin@farmaclinic.local'
+ON CONFLICT (medicamento_id, numero_lote) DO NOTHING
+SQL);
     }
 }

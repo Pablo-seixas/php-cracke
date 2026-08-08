@@ -9,8 +9,9 @@ Etapas concluídas:
 - Etapa 1 — ambiente, instalação e PostgreSQL.
 - Etapa 2 — schema, migrations, seed, fixtures e relacionamentos ORM.
 - Etapa 3 — autenticação, autorização, usuários, perfis, permissões e bloqueio de login.
+- Etapa 4 — medicamentos, lotes, validade, bloqueio/recolhimento e consulta FEFO.
 
-Os módulos farmacêuticos e clínicos serão implementados a partir da Etapa 4.
+Os demais módulos farmacêuticos e clínicos continuam nas etapas seguintes.
 
 ## Stack
 
@@ -71,7 +72,7 @@ A aplicação estará disponível em `http://localhost:8765`.
 php vendor/bin/phpunit
 ```
 
-Resultado da Etapa 3: 17 testes e 89 assertions aprovados.
+Resultado atual: 21 testes e 97 assertions aprovados.
 
 ## Dados de demonstração
 
@@ -124,7 +125,6 @@ O ambiente local usa locale `pt_BR`, fuso `America/Bahia` e UTF-8. Credenciais e
 
 ## Próximas etapas
 
-1. Medicamentos, produtos, categorias, fabricantes, lotes e validade.
-2. Estoque e alertas.
-3. Compras, vendas, clínica, financeiro, dashboard e API REST.
-4. Auditoria, segurança e revisão LGPD.
+1. Produtos, categorias, fabricantes, estoque e alertas.
+2. Compras, vendas, clínica, financeiro, dashboard e API REST.
+3. Auditoria, segurança e revisão LGPD.

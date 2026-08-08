@@ -28,6 +28,9 @@ $usuarioAtual = $identityData instanceof Usuario ? $identityData->nome : null;
             <?= $this->Html->link('FarmaClinic Manager', '/', ['class' => 'navbar-brand fw-semibold']) ?>
             <?php if ($usuarioAtual !== null): ?>
                 <div class="d-flex align-items-center gap-3 text-white">
+                    <?= $this->Html->link('Medicamentos', '/medicamentos', ['class' => 'text-white text-decoration-none']) ?>
+                    <?= $this->Html->link('Lotes', '/lotes', ['class' => 'text-white text-decoration-none']) ?>
+                    <?= $this->Html->link('Usuários', '/usuarios', ['class' => 'text-white text-decoration-none']) ?>
                     <span><?= h($usuarioAtual) ?></span>
                     <?= $this->Form->postLink('Sair', '/logout', ['class' => 'btn btn-sm btn-outline-light']) ?>
                 </div>

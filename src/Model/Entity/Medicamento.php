@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use DateTimeImmutable;
 
 /**
  * Medicamento Entity
@@ -88,4 +89,32 @@ class Medicamento extends Entity
         'solicitacoes_compras_itens' => true,
         'vendas_itens' => true,
     ];
+
+    /** Calculate sellable stock from loaded lots. */
+    public function estoqueAtual(): float
+    {
+        $hoje = new DateTimeImmutable('today');
+        $total = 0.0;
+        foreach ($this->lotes ?? [] as $lote) {
+            $validade = $lote->data_validade?->toNative();
+            if (!$lote->bloqueado && !$lote->recolhido && $validade >= $hoje) {
+                $total += (float)$lote->quantidade_disponivel;
+            }
+        }
+
+        return $total;
+    }
+
+    /** Classify stock using the configured minimum and maximum. */
+    public function statusEstoque(): string
+    {
+        $quantidade = $this->estoqueAtual();
+
+        return match (true) {
+            $quantidade <= 0 => 'sem_estoque',
+            $quantidade <= (float)$this->estoque_minimo => 'critico',
+            $quantidade >= (float)$this->estoque_maximo => 'elevado',
+            default => 'normal',
+        };
+    }
 }
