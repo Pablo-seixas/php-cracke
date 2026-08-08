@@ -10,6 +10,7 @@ Etapas concluídas:
 - Etapa 2 — schema, migrations, seed, fixtures e relacionamentos ORM.
 - Etapa 3 — autenticação, autorização, usuários, perfis, permissões e bloqueio de login.
 - Etapa 4 — medicamentos, produtos, categorias, fabricantes, lotes, validade, bloqueio/recolhimento e consulta FEFO.
+- Etapa 5 — razão de estoque, entradas, saídas, ajustes, inventário, saldo mínimo e alertas de validade.
 
 Os demais módulos farmacêuticos e clínicos continuam nas etapas seguintes.
 
@@ -72,7 +73,7 @@ A aplicação estará disponível em `http://localhost:8765`.
 php vendor/bin/phpunit
 ```
 
-Resultado atual: 21 testes e 97 assertions aprovados.
+Resultado atual: 32 testes e 120 assertions aprovados.
 
 ## Dados de demonstração
 
@@ -125,6 +126,6 @@ O ambiente local usa locale `pt_BR`, fuso `America/Bahia` e UTF-8. Credenciais e
 
 ## Próximas etapas
 
-1. Estoque, movimentações, alertas e inventário.
-2. Compras, vendas, clínica, financeiro, dashboard e API REST.
+1. Fornecedores, solicitações, cotações, aprovação e recebimento de compras.
+2. Vendas, clínica, financeiro, dashboard e API REST.
 3. Auditoria, segurança e revisão LGPD.
