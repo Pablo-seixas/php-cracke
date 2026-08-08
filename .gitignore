@@ -2,9 +2,16 @@
 ##########################
 /config/app_local.php
 /config/.env
+.env
+.env.*
+!.env.example
+!/config/.env.example
 /logs/*
 /tmp/*
 /vendor/*
+/cache/
+/coverage/
+/.local-reports/
 /composer.phar
 /cacert.pem
 /windows-ca-bundle.pem
@@ -45,12 +52,22 @@ tests.sqlite
 nbproject/*
 # Visual Studio Code
 .vscode
+.vscode/
 # nova
 .nova
 # Sass preprocessor
 .sass-cache/
 # node
 /node_modules/*
+*.log
+*.sql
+*.sqlite
+*.db
+*.bak
+*.backup
+*.zip
+*.rar
+*.7z
 # yarn
 yarn-debug.log
 yarn-error.log

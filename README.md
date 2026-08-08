@@ -1,133 +1,172 @@
-# FarmaClinic Manager
+FarmaClinic Manager
+===================
 
-Sistema empresarial para gestão integrada de farmácia e atendimento clínico, desenvolvido com PHP 8.2+, CakePHP 5 e PostgreSQL.
+Sistema web para reunir rotinas de farmácia e atendimento clínico em uma única aplicação. O projeto usa CakePHP 5, PostgreSQL e uma organização em camadas para manter regras de negócio fora dos controllers.
 
-## Estado do desenvolvimento
+SOBRE O PROJETO
+---------------
 
-Etapas concluídas:
+O FarmaClinic Manager foi criado como projeto de portfólio para representar fluxos que normalmente ficam separados em sistemas de estoque, venda e atendimento. O código atual cobre desde o cadastro de medicamentos e controle por lote até agenda, atendimento e prontuário versionado.
 
-- Etapa 1 — ambiente, instalação e PostgreSQL.
-- Etapa 2 — schema, migrations, seed, fixtures e relacionamentos ORM.
-- Etapa 3 — autenticação, autorização, usuários, perfis, permissões e bloqueio de login.
-- Etapa 4 — medicamentos, produtos, categorias, fabricantes, lotes, validade, bloqueio/recolhimento e consulta FEFO.
-- Etapa 5 — razão de estoque, entradas, saídas, ajustes, inventário, saldo mínimo e alertas de validade.
-- Etapa 6 — fornecedores, CNPJ, solicitações, cotações, aprovação, pedidos, recebimento e contas a pagar.
-- Etapa 7 — vendas, FEFO, receitas, pagamentos, cancelamentos, estornos e controle de caixa.
+FUNCIONALIDADES CONCLUÍDAS
+--------------------------
 
-Os demais módulos farmacêuticos e clínicos continuam nas etapas seguintes.
+- Login, logout, recuperação de acesso e bloqueio por tentativas inválidas
+- Administração de usuários, perfis e permissões
+- Medicamentos, produtos, categorias e fabricantes
+- Lotes, validade, estoque e movimentações sem exclusão física
+- Fornecedores, solicitações, cotações, aprovação e recebimento de compras
+- Vendas, pagamentos, cancelamento, caixa e estorno de estoque
+- Pacientes, profissionais, especialidades, agenda e consultas
+- Atendimentos e prescrições registradas
+- Prontuário com autorização, auditoria de visualização e histórico de versões
+- Dashboard gerencial com filtros e exportação de vendas em CSV
+- Auditoria aplicada às operações críticas já implementadas
 
-## Stack
+EM DESENVOLVIMENTO
+------------------
 
-- PHP 8.2.31
-- CakePHP 5.4.1
-- PostgreSQL 15.3
-- Composer 2.10.2
-- PHPUnit 11.5
-- CakePHP Authentication 3.3
-- CakePHP Authorization 3.5
-- Bootstrap 5.3
+- Ampliação dos indicadores e relatórios gerenciais
+- Cobertura de contas a pagar e contas a receber na interface
+- Revisão final de segurança e requisitos da LGPD
 
-## Requisitos
+PLANEJADO
+---------
+
+- API REST versionada em api/v1
+- Documentação dos endpoints da API
+- Exportações adicionais e anexos clínicos
+
+TECNOLOGIAS
+-----------
 
 - PHP 8.2 ou superior
-- Extensões PHP `intl`, `pdo_pgsql`, `pgsql` e `zip`
+- CakePHP 5
 - PostgreSQL 15 ou superior
+- CakePHP ORM e Migrations
+- CakePHP Authentication e Authorization
 - Composer 2
+- Bootstrap 5
+- JavaScript e Chart.js
+- PHPUnit 11
 - Git
 
-## Instalação
+ARQUITETURA
+-----------
 
-```powershell
-composer install
-Copy-Item config/.env.example config/.env
-```
+Os controllers recebem a requisição e coordenam a resposta. As regras de estoque, compra, venda, agenda, atendimento e prontuário ficam em services. Tables e entities representam o acesso e os dados do domínio. Policies aplicam as permissões, exceptions representam falhas esperadas e templates cuidam somente da apresentação. Consultas específicas de estoque ficam em repository.
 
-Edite `config/.env` e substitua `CHANGE_ME` por uma senha local segura. O arquivo é ignorado pelo Git e não deve ser versionado.
+BANCO DE DADOS
+--------------
 
-Crie o usuário e os bancos no PostgreSQL:
+O projeto usa PostgreSQL. A migration inicial cria 41 tabelas, chaves estrangeiras, índices, restrições e campos de auditoria. Valores monetários usam NUMERIC, datas de validade usam DATE e eventos usam TIMESTAMPTZ. Dados estruturados, como horários e alterações auditadas, usam JSONB.
 
-```sql
-CREATE ROLE farmaclinic LOGIN PASSWORD 'SENHA_LOCAL_SEGURA';
-CREATE DATABASE farmaclinic OWNER farmaclinic ENCODING 'UTF8';
-CREATE DATABASE farmaclinic_test OWNER farmaclinic ENCODING 'UTF8';
-```
+Relacionamentos principais:
 
-Execute as migrations e os dados iniciais:
+    usuarios -- usuarios_perfis -- perfis -- perfis_permissoes -- permissoes
+    categorias -- medicamentos -- lotes -- movimentacoes_estoque
+    fornecedores -- compras -- compras_itens
+    vendas -- vendas_itens -- pagamentos
+    pacientes -- consultas -- atendimentos
+    pacientes -- prontuarios -- prontuarios_historicos
 
-```powershell
-php bin/cake.php migrations migrate
-php bin/cake.php migrations migrate --connection test
-php bin/cake.php seeds run InitialData
-```
+SEGURANÇA
+---------
 
-Valide a conexão e execute o servidor:
+- Senhas armazenadas com hash
+- Autenticação e autorização integradas ao CakePHP
+- Policies com permissões por perfil e privilégio administrativo explícito
+- Proteção CSRF e Form Protection nos formulários
+- Consultas parametrizadas pelo ORM e pela camada de banco do CakePHP
+- Validação no servidor e escape de saída nos templates
+- Bloqueio temporário após tentativas inválidas de login
+- Cookies HttpOnly, SameSite e opção Secure para produção
+- Auditoria de acessos e alterações em dados clínicos
+- Credenciais locais mantidas fora do Git
 
-```powershell
-php bin/cake.php migrations status
-php bin/cake.php server -H localhost -p 8765
-```
+INSTALAÇÃO
+----------
 
-A aplicação estará disponível em `http://localhost:8765`.
+Pré-requisitos: PHP 8.2 ou superior, PostgreSQL 15 ou superior, Composer 2 e Git.
 
-## Testes
+Clone o repositório:
 
-```powershell
-php vendor/bin/phpunit
-```
+    git clone git@github.com:Pablo-seixas/php-cracke.git
+    cd php-cracke
 
-Resultado atual: 45 testes e 150 assertions aprovados.
+Instale as dependências:
 
-## Dados de demonstração
+    composer install
 
-- Usuário: `admin@farmaclinic.local`
-- Senha: `Demo@12345`
+Crie a configuração local:
 
-Esses dados são fictícios e destinados somente ao desenvolvimento.
+    Copy-Item config/.env.example config/.env
 
-O login está disponível em `http://localhost:8765/login`.
+Edite config/.env e defina um salt próprio, a URL da aplicação e as URLs de conexão dos bancos local e de testes. Não versione esse arquivo.
 
-## Autenticação e autorização
+Crie os bancos PostgreSQL e aplique a estrutura:
 
-- Sessão e formulário processados pelo CakePHP Authentication.
-- Policies e resolução ORM fornecidas pelo CakePHP Authorization.
-- Senhas armazenadas exclusivamente com hash seguro.
-- Usuários inativos, excluídos ou temporariamente bloqueados não são autenticados.
-- Cinco falhas em quinze minutos bloqueiam a conta por trinta minutos.
-- Login, logout e mudanças de permissões são auditados.
-- Cookies usam `HttpOnly`, `SameSite=Lax` e modo estrito.
-- Defina `SESSION_COOKIE_SECURE=true` em produção HTTPS.
-- Logout aceita somente requisições POST protegidas por CSRF e FormProtection.
+    php bin/cake.php migrations migrate
+    php bin/cake.php migrations migrate --connection test
+    php bin/cake.php seeds run InitialData
 
-## Banco de dados
+Inicie a aplicação:
 
-A migration inicial cria 41 tabelas de domínio. Os principais relacionamentos são:
+    php bin/cake.php server -H 127.0.0.1 -p 8765
 
-```text
-usuarios --< usuarios_perfis >-- perfis --< perfis_permissoes >-- permissoes
-categorias --< medicamentos >-- fabricantes
-medicamentos --< lotes --< movimentacoes_estoque
-fornecedores --< cotacoes --< cotacoes_itens
-solicitacoes_compras --< solicitacoes_compras_itens
-compras --< compras_itens
-clientes --< vendas --< vendas_itens
-pacientes --< consultas --< atendimentos
-pacientes -- prontuarios --< prontuarios_historicos
-vendas --< pagamentos >-- caixas --< movimentacoes_caixa
-```
+Acesse http://127.0.0.1:8765.
 
-Valores monetários usam `NUMERIC`, validade usa `DATE`, eventos usam `TIMESTAMPTZ`, auditoria usa `JSONB` e endereços de rede usam `INET`.
+DADOS DE DEMONSTRAÇÃO
+---------------------
 
-## Configuração
+Os dados iniciais são fictícios e destinados somente ao ambiente de desenvolvimento.
 
-- `config/app.php`: driver PostgreSQL e configurações compartilhadas.
-- `config/app_local.php`: configuração local gerada pelo CakePHP e ignorada pelo Git.
-- `config/.env.example`: modelo seguro das variáveis de ambiente.
-- `config/.env`: credenciais locais, ignoradas pelo Git.
+    E-mail: admin@farmaclinic.local
+    Senha: Demo@12345
 
-O ambiente local usa locale `pt_BR`, fuso `America/Bahia` e UTF-8. Credenciais e salts nunca devem ser adicionados ao repositório.
+TESTES
+------
 
-## Próximas etapas
+Execute:
 
-1. API REST versionada.
-2. Auditoria, segurança e revisão LGPD.
-3. Documentação e preparação final do repositório.
+    php vendor/bin/phpunit
+
+Na última validação local foram aprovados 45 testes e 150 assertions. O banco farmaclinic_test precisa estar configurado antes da execução.
+
+ESTRUTURA DO PROJETO
+--------------------
+
+    config/
+      Migrations/
+      Seeds/
+    src/
+      Controller/
+      Exception/
+      Middleware/
+      Model/
+      Policy/
+      Repository/
+      Service/
+    templates/
+    tests/
+      Fixture/
+      TestCase/
+    webroot/
+
+STATUS DO PROJETO
+-----------------
+
+Backend e interface web funcionais para os módulos publicados. O projeto continua em desenvolvimento; a API REST e a revisão final de publicação ainda não fazem parte desta versão.
+
+PRÓXIMAS ETAPAS
+---------------
+
+- Implementar e testar a API REST versionada
+- Completar os fluxos financeiros restantes
+- Ampliar relatórios e exportações
+- Concluir a revisão de segurança, LGPD e documentação
+
+AUTOR
+-----
+
+Pablo Seixas

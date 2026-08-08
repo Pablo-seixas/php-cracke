@@ -47,10 +47,10 @@ return [
              */
             //'port' => 'non_standard_port_number',
 
-            'username' => 'my_app',
-            'password' => 'secret',
+            'username' => 'seu_usuario',
+            'password' => 'sua_senha_local',
 
-            'database' => 'my_app',
+            'database' => 'farmaclinic',
             /*
              * If not using the default 'public' schema with the PostgreSQL driver
              * set it here.
@@ -69,11 +69,11 @@ return [
         'test' => [
             'host' => 'localhost',
             //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'test_myapp',
+            'username' => 'seu_usuario',
+            'password' => 'sua_senha_local',
+            'database' => 'farmaclinic_test',
             //'schema' => 'myapp',
-            'url' => env('DATABASE_TEST_URL', 'sqlite://127.0.0.1/tmp/tests.sqlite'),
+            'url' => env('DATABASE_TEST_URL', null),
         ],
     ],
 
