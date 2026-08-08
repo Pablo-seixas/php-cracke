@@ -12,6 +12,7 @@ Etapas concluídas:
 - Etapa 4 — medicamentos, produtos, categorias, fabricantes, lotes, validade, bloqueio/recolhimento e consulta FEFO.
 - Etapa 5 — razão de estoque, entradas, saídas, ajustes, inventário, saldo mínimo e alertas de validade.
 - Etapa 6 — fornecedores, CNPJ, solicitações, cotações, aprovação, pedidos, recebimento e contas a pagar.
+- Etapa 7 — vendas, FEFO, receitas, pagamentos, cancelamentos, estornos e controle de caixa.
 
 Os demais módulos farmacêuticos e clínicos continuam nas etapas seguintes.
 
@@ -74,7 +75,7 @@ A aplicação estará disponível em `http://localhost:8765`.
 php vendor/bin/phpunit
 ```
 
-Resultado atual: 35 testes e 127 assertions aprovados.
+Resultado atual: 38 testes e 135 assertions aprovados.
 
 ## Dados de demonstração
 
@@ -127,6 +128,6 @@ O ambiente local usa locale `pt_BR`, fuso `America/Bahia` e UTF-8. Credenciais e
 
 ## Próximas etapas
 
-1. Vendas, pagamentos, cancelamentos e caixa.
-2. Clínica, dashboard, relatórios e API REST.
+1. Pacientes, profissionais, especialidades, agenda e consultas.
+2. Atendimentos, prontuários, dashboard, relatórios e API REST.
 3. Auditoria, segurança e revisão LGPD.
